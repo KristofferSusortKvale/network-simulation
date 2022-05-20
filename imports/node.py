@@ -1,15 +1,20 @@
 from imports.datetime import get_now
 from imports.package import data
+from numpy.random import randint
 
 
 class node:
-    def __init__(self, ip_address, is_test):
+    def __init__(self, ip_address, max_send_data_packages=1, is_test=False,
+                    pretty_name=""):
+        self._pretty_name = pretty_name
+
         self._ip_address = ip_address
+        self._max_packages = max_send_data_packages
 
         self._lookup_table = {}
         self._package_queue = []
         self._current_package = None
-        self._outgoing_package = None
+        self._outgoing_packages = []
 
         self._idle_cycles = 0
         self._packages_sent = 0
@@ -21,16 +26,40 @@ class node:
             # file.write(create_json(test_package))
             # file.close()
 
+    def __str__(self):
+        if self._pretty_name == "":
+            return "Unnamed Node"
+        else:
+            return "Node: " + self._pretty_name
+
     def get_ip_address(self):
         return self._ip_address
 
     def add_package(self, package):
         self._package_queue.append(package)
 
+    def remove_lookup_entry(self, ip_address):
+        self._lookup_table.pop(ip_address)
+
+    def add_lookup_entry(self, ip_address, node):
+        self._lookup_table[ip_address] = node
+
+    def lookup(self, ip_address):
+        if "." in ip_address:
+            try:
+                return self._lookup_table[ip_address]
+            except:
+                last_dot_index = ip_address.rfind(".")
+                return self.lookup(ip_address[:last_dot_index])
+        else:
+            try:
+                return self._lookup_table[ip_address]
+            except:
+                return -1
+
     def check_received(self):
 
         if len(self._package_queue) == 0:
-            self._current_package = None
             self._idle_cycles += 1
         else:
             # sort packages by time
@@ -43,20 +72,23 @@ class node:
         if self._current_package is not None:
             if self._current_package.get_header().get_target() == self._ip_address:
                 # package to me
-                # read package
                 if self._current_package.get_payload().get_is_task():
-                    pass
                     # generate data package as response
+                    num_packages = randint(self._max_packages)
+                    for i in range(num_packages):
+                        package = data(self._ip_address,
+                            self._current_package.get_header().get_sender())
+                        self._outgoing_packages.append(package)
                 elif self._current_package.get_payload().get_is_ping():
-
+                    # ping, so send data package with time used to get here
                     time_used = get_now() \
                     - self._current_package.get_header().get_time()
 
-                    data = { "time_used": time_used }
+                    out_data = { "time_used": time_used }
 
-                    self._outgoing_package = data(self._ip_address,
+                    self._outgoing_packages.append(data(self._ip_address,
                             self._current_package.get_header().get_sender(),
-                            data)
+                            payload_data=out_data))
                 else:
                     pass
                     # package of data sent to this device
@@ -64,21 +96,27 @@ class node:
             else:
                 pass
                 # package not to this node, forwarding
-                # set next_target_path using lookup_table
-                # set outgoing_package to same content as current_package
+                # set outgoing_package to current_package
+                self._outgoing_packages.append(self._current_package)
                 # continue to send_package
+        self._current_package = None
 
 
     def send_package(self):
-        if self._outgoing_package is not None:
-            self._packages_sent += 1
+        if len(self._outgoing_packages) > 0:
+            outgoing_package = self._outgoing_packages.pop(0)
 
-            target_node = self._lookup_table[
-                            self._outgoing_package.get_header().get_target()]
+            target_ip_address = outgoing_package.get_header().get_target()
+            target_node = self.lookup(target_ip_address)
 
-            target_node.add_package(self._outgoing_package)
-            self._outgoing_package = None
+            if target_node == -1:
+                print("Node with ip: ", target_ip_address,
+                        " not found in lookup table.")
+            else:
+                target_node.add_package(outgoing_package)
+                self._packages_sent += 1
 
     def write_results(self):
+        print("### Results for ", self, "###")
         print("Packages sent: ", str(self._packages_sent))
         print("Idle cycles: ", str(self._idle_cycles))
