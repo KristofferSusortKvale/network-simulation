@@ -4,15 +4,15 @@ from imports.package import data
 
 class node:
     def __init__(self, ip_address, is_test):
-        self.ip_address = ip_address
+        self._ip_address = ip_address
 
-        self.lookup_table = {}
-        self.package_queue = []
-        self.current_package = None
-        self.outgoing_package = None
+        self._lookup_table = {}
+        self._package_queue = []
+        self._current_package = None
+        self._outgoing_package = None
 
-        self.idle_cycles = 0
-        self.packages_sent = 0
+        self._idle_cycles = 0
+        self._packages_sent = 0
 
         if is_test:
             pass
@@ -22,40 +22,40 @@ class node:
             # file.close()
 
     def get_ip_address(self):
-        return self.ip_address
+        return self._ip_address
 
     def add_package(self, package):
-        self.package_queue.append(package)
+        self._package_queue.append(package)
 
     def check_received(self):
 
-        if len(self.package_queue) == 0:
-            self.current_package = None
-            self.idle_cycles += 1
+        if len(self._package_queue) == 0:
+            self._current_package = None
+            self._idle_cycles += 1
         else:
             # sort packages by time
-            self.package_queue = sorted(self.package_queue,
+            self._package_queue = sorted(self._package_queue,
                 key=lambda p: p.get_header().get_time())
-            self.current_package = self.package_queue.pop(0)
+            self._current_package = self._package_queue.pop(0)
 
 
     def process_package(self):
-        if self.current_package is not None:
-            if self.current_package.get_header().get_target() == self.ip_address:
+        if self._current_package is not None:
+            if self._current_package.get_header().get_target() == self._ip_address:
                 # package to me
                 # read package
-                if self.current_package.get_payload().get_is_task():
+                if self._current_package.get_payload().get_is_task():
                     pass
                     # generate data package as response
-                elif self.current_package.get_payload().get_is_ping():
+                elif self._current_package.get_payload().get_is_ping():
 
                     time_used = get_now() \
-                    - self.current_package.get_header().get_time()
+                    - self._current_package.get_header().get_time()
 
                     data = { "time_used": time_used }
 
-                    self.outgoing_package = data(self.ip_address,
-                            self.current_package.get_header().get_sender(),
+                    self._outgoing_package = data(self._ip_address,
+                            self._current_package.get_header().get_sender(),
                             data)
                 else:
                     pass
@@ -70,15 +70,15 @@ class node:
 
 
     def send_package(self):
-        if self.outgoing_package is not None:
-            self.packages_sent += 1
+        if self._outgoing_package is not None:
+            self._packages_sent += 1
 
-            target_node = self.lookup_table[
-                            self.outgoing_package.get_header().get_target()]
+            target_node = self._lookup_table[
+                            self._outgoing_package.get_header().get_target()]
 
-            target_node.add_package(self.outgoing_package)
-            self.outgoing_package = None
+            target_node.add_package(self._outgoing_package)
+            self._outgoing_package = None
 
     def write_results(self):
-        print("Packages sent: ", str(self.packages_sent))
-        print("Idle cycles: ", str(self.idle_cycles))
+        print("Packages sent: ", str(self._packages_sent))
+        print("Idle cycles: ", str(self._idle_cycles))
