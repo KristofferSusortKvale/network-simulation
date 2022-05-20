@@ -42,26 +42,26 @@ class package:
         return self._payload
 
 
-def ping(sender, target):
+def ping(sender_ip_address, target_ip_address):
     t_header = header(
-                    sender.get_ip_address(),
-                    target.get_ip_address(),
+                    sender_ip_address,
+                    target_ip_address,
                     get_now())
     t_payload = payload(False, True, {})
     return package(t_header, t_payload)
 
-def task(sender, target):
+def task(sender_ip_address, target_ip_address):
     t_header = header(
-                    sender.get_ip_address(),
-                    target.get_ip_address(),
+                    sender_ip_address,
+                    target_ip_address,
                     get_now())
     t_payload = payload(True, False, {})
     return package(t_header, t_payload)
 
-def data(sender, target, data):
+def data(sender_ip_address, target_ip_address, payload_data={}):
     t_header = header(
-                    sender.get_ip_address(),
-                    target.get_ip_address(),
+                    sender_ip_address,
+                    target_ip_address,
                     get_now())
-    t_payload = payload(False, False, data)
+    t_payload = payload(False, False, payload_data)
     return package(t_header, t_payload)
