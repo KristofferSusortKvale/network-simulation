@@ -5,7 +5,7 @@ from json import dumps as create_json
 from shutil import rmtree
 from pathlib import Path
 from time import sleep
-# from ../functions/timedate.py import get_now()
+from my_datetime import get_now()
 
 
 class node:
@@ -42,6 +42,11 @@ class node:
             file.write(create_json(test_package))
             file.close()
 
+    def get_incoming_folder(self):
+        return self.incoming_folder
+
+    def get_ip_address(self):
+        return self.ip_address
 
     def check_received(self):
         incoming_packages = []
