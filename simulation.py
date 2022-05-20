@@ -1,18 +1,26 @@
-# Actual loop
-setup()
-if is_test:
-    test_setup()
+# from imports/classes/node.py import node
 
+# loop variables
+end_of_simulation = False
+is_test = False
+is_one_cycle = False
+simulation_time = 5*60 # seconds
+end_time = get_now() + simulation_time
+simulation_root_directory = Path.cwd().parents[0]
+
+node = node("127.0.0.1", "unique-string", is_test)
+
+# Actual loop
 while not end_of_simulation:
-    check_received()
-    process_package()
+    node.check_received()
+    node.process_package()
     #send_package()
 
     if is_one_cycle:
         end_of_simulation = True
 
-    if datetime.now() > end_time:
+    if get_now() > end_time:
         end_of_simulation = True
 
-write_results()
-clean_up()
+node.write_results()
+node.clean_up()
