@@ -7,6 +7,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from time import sleep
 
+# loop variables
 end_of_simulation = False
 is_test = False
 is_one_cycle = False
@@ -14,9 +15,15 @@ simulation_time = 5*60 # seconds
 end_time = datetime.now() + timedelta(0, simulation_time)
 simulation_root_directory = Path.cwd().parents[0]
 
+
+
+# node variables
+# unique
 ip_address = "127.0.0.1"
 unique_string = "node" # used to create file names
 files_created = 0
+
+# same for all
 lookup_table = {}
 current_package = {}
 outgoing_package = {}

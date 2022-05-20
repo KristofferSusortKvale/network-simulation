@@ -1,20 +1,18 @@
-from datetime import datetime
+# Actual loop
+setup()
+if is_test:
+    test_setup()
 
-class simulation:
-    def __init__(self):
-        self.end_of_simulation = False
-        self.package_count = 0
+while not end_of_simulation:
+    check_received()
+    process_package()
+    #send_package()
 
-    def get_new_file_name(self):
-        self.package_count += 1
-        return "package" + str(self.package_count) + ".json"
+    if is_one_cycle:
+        end_of_simulation = True
 
-    def end_simulation(self):
-        self.end_of_simulation = True
+    if datetime.now() > end_time:
+        end_of_simulation = True
 
-simulation_time = 30
-sim = simulation()
-simulation_start = datetime.now()
-
-while int(datetime.now() - simulation_start) < simulation_time:
-    
+write_results()
+clean_up()
