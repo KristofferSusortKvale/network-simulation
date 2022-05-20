@@ -11,8 +11,8 @@ simulation_time = 10 # seconds
 end_time = get_now() + simulation_time
 simulation_root_directory = Path.cwd().parents[0]
 
-node = node("127.0.0.1", "unique-string", is_test)
-user = user(5, "127.0.0.2", "other-unique-string")
+node = node("127.0.0.1", is_test)
+user = user("127.0.0.2", 5)
 
 # Actual loop
 while not end_of_simulation:
@@ -34,4 +34,3 @@ while not end_of_simulation:
 
 node.write_results()
 user.write_results()
-# node.clean_up()
