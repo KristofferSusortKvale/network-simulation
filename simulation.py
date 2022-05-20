@@ -1,12 +1,13 @@
 from imports.node import node
 from imports.user import user
-from imports.my_datetime import get_now
+from imports.datetime import get_now
+from pathlib import Path
 
 # loop variables
 end_of_simulation = False
 is_test = False
 is_one_cycle = False
-simulation_time = 5*60 # seconds
+simulation_time = 10 # seconds
 end_time = get_now() + simulation_time
 simulation_root_directory = Path.cwd().parents[0]
 
@@ -23,7 +24,7 @@ while not end_of_simulation:
     # nodes
     node.check_received()
     node.process_package()
-    #send_package()
+    node.send_package()
 
     if is_one_cycle:
         end_of_simulation = True
@@ -32,4 +33,5 @@ while not end_of_simulation:
         end_of_simulation = True
 
 node.write_results()
-node.clean_up()
+user.write_results()
+# node.clean_up()
