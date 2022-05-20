@@ -1,7 +1,6 @@
 from imports.node import node
 from imports.user import user
 from imports.datetime import get_now
-from pathlib import Path
 
 # loop variables
 end_of_simulation = False
@@ -9,7 +8,6 @@ is_test = False
 is_one_cycle = False
 simulation_time = 10 # seconds
 end_time = get_now() + simulation_time
-simulation_root_directory = Path.cwd().parents[0]
 
 node = node("127.0.0.1", is_test)
 user = user("127.0.0.2", 5)
