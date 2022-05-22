@@ -48,13 +48,15 @@ def routers_and_nodes(routers, list_of_list_of_nodes):
 
     router_ips = [router.get_ip_address() for router in routers]
 
+    fully_connect(routers)
+
     for i in range(len(list_of_list_of_nodes)):
         # router connected to all its nodes
         # one_to_all(routers[i], list_of_list_of_nodes[i])
 
         # a router is connected to one other router, and all router ips map to
         # that other router
-        indirect_list(routers[i-1], routers[i], router_ips)
+        #indirect_list(routers[i-1], routers[i], router_ips)
 
 
 
