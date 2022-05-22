@@ -18,6 +18,7 @@ class node:
 
         self._idle_cycles = 0
         self._packages_sent = 0
+        self._data_packages_received = 0
 
         if is_test:
             pass
@@ -90,7 +91,7 @@ class node:
                             self._current_package.get_header().get_sender(),
                             payload_data=out_data))
                 else:
-                    pass
+                    self._data_packages_received += 1
                     # package of data sent to this device
 
             else:
@@ -119,4 +120,7 @@ class node:
     def write_results(self):
         print("### Results for ", self, "###")
         print("Packages sent: ", str(self._packages_sent))
+        print("Packages received: ", str(self._data_packages_received))
         print("Idle cycles: ", str(self._idle_cycles))
+        print("Length incoming queue: ", str(len(self._package_queue)))
+        print("Length outgoing queue: ", str(len(self._outgoing_packages)))
