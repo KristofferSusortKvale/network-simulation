@@ -9,9 +9,9 @@ class simulation:
         is_one_cycle=False,
         is_time_based = False, simulation_time = 10,
         simulation_cycles = 1000,
-        number_of_routers = 5, number_of_nodes_per_router = 5,
+        number_of_routers = 2, number_of_nodes_per_router = 5,
         max_send_data_packages = 5,
-        number_of_users = 50):
+        number_of_users = 5):
 
         self._end_of_simulation  = False
 
