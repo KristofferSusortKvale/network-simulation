@@ -1,5 +1,4 @@
 # TODOs
-- implement lookup table
 - implement alt routing
 - implement timeout
 
