@@ -66,10 +66,7 @@ def routers_and_nodes(routers, list_of_list_of_nodes):
         # nodes fully connected to local nodes and router
         fully_connect(local_nodes)
 
-
-
-
-
-    # node to router for all ip's
-    # router to all self nodes directly
-    # routers to other routers devices
+def network_results(node_list):
+    # function to print results after a simulation
+    for node in node_list:
+        node.write_results()

@@ -1,7 +1,7 @@
 from imports.node import node
 from imports.user import user
 from imports.datetime import get_now
-from imports.network import routers_and_nodes
+from imports.network import routers_and_nodes, network_results
 from numpy.random import randint
 
 k = 1000
@@ -112,5 +112,6 @@ while not end_of_simulation:
 # for router in routers:
 #     router.write_results()
 
-for device in devices:
-    device.write_results()
+# for device in devices:
+#     device.write_results()
+network_results(devices)
