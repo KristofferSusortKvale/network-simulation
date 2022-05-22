@@ -46,7 +46,8 @@ class simulation:
             node for list_of_nodes in self._devices for node in list_of_nodes]
 
         self._users = [
-            user(str(number_of_routers)+"."+str(i), pretty_name="User "+str(i))
+            user(str(number_of_routers)+"."+str(i), pretty_name="User "+str(i),
+                    wait_multiplier=2000, task_rate=5)
             for i in range(number_of_users)]
 
     def tick(self):

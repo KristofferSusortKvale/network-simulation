@@ -4,9 +4,12 @@ from math import floor
 from imports.package import task, ping, data
 
 class user:
-    def __init__(self, ip_address, min_wait=1, pretty_name=""):
+    def __init__(
+                self, ip_address,
+                wait_multiplier=1, task_rate=1, pretty_name=""):
         self._pretty_name = pretty_name
-        self._min_wait = min_wait
+        self._wait_multiplier = wait_multiplier
+        self._task_rate = task_rate
         self._last_update = get_now()
         self._ip_address = ip_address
         self._next_task = 0
@@ -26,7 +29,8 @@ class user:
         self._packages_recieved += 1 # sink for packages
 
     def new_task(self):
-        self._next_task = self._min_wait + floor(exponential())
+        self._next_task = self._wait_multiplier *\
+                            floor(exponential(1/self._task_rate))
 
     def tick(self):
         self._next_task -= 1
