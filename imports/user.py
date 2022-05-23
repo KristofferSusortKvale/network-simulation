@@ -4,17 +4,13 @@ from math import floor
 from imports.package import task, ping, data
 
 class user:
-    def __init__(
-                self, ip_address,
-                wait_multiplier=1, task_rate=1, pretty_name=""):
+    def __init__(self, wait_multiplier=1, task_rate=1, pretty_name=""):
         self._pretty_name = pretty_name
         self._wait_multiplier = wait_multiplier
         self._task_rate = task_rate
-        self._last_update = get_now()
-        self._ip_address = ip_address
         self._next_task = 0
         self._packages_sent = 0
-        self._packages_recieved = 0
+        # self._packages_recieved = 0
 
     def __str__(self):
         if self._pretty_name == "":
@@ -22,13 +18,10 @@ class user:
         else:
             return "User: " + self._pretty_name
 
-    def get_ip_address(self):
-        return self._ip_address
+    # def add_package(self, package):
+    #     self._packages_recieved += 1 # sink for packages
 
-    def add_package(self, package):
-        self._packages_recieved += 1 # sink for packages
-
-    def new_task(self):
+    def set_new_task_time(self):
         self._next_task = self._wait_multiplier *\
                             floor(exponential(1/self._task_rate))
 
@@ -45,6 +38,13 @@ class user:
         start.add_package(outgoing_package)
 
     def write_results(self):
-        print("### Results for ", self, "###")
-        print("Packages sent: ", self._packages_sent)
+        result_string = "### Results for " + str(self) + "###\n"
+        result_string = "Packages sent: " + str(self._packages_sent) + "\n"
+        return result_string
         #print("Packages recieved: ", self._packages_recieved)
+
+def user_results(users):
+    result_string = "### User Results ###\n"
+    for user in users:
+        result_string += user.write_results()
+    return result_string
