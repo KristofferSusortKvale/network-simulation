@@ -60,7 +60,7 @@ def routers_and_nodes(routers, list_of_list_of_nodes):
 
 
 
-        local_nodes = list_of_list_of_nodes[i]
+        local_nodes = list_of_list_of_nodes[i].copy()
         for node in local_nodes:
             # nodes map all router ips to its router
             indirect_list(node, routers[i], router_ips)
@@ -70,5 +70,8 @@ def routers_and_nodes(routers, list_of_list_of_nodes):
 
 def network_results(node_list):
     # function to print results after a simulation
+    result_string = "### Network Nodes Results ###\n"
     for node in node_list:
-        node.write_results()
+        result_string += node.write_results()
+
+    return result_string
