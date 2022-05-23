@@ -4,9 +4,11 @@ from numpy.random import randint
 
 
 class node:
-    def __init__(self, ip_address, max_send_data_packages=1, is_test=False,
-                    pretty_name=""):
+    def __init__(self, ip_address, parent_simulation,
+                    max_send_data_packages=1, is_test=False, pretty_name=""):
         self._pretty_name = pretty_name
+
+        self._parent_simulation = parent_simulation
 
         self._ip_address = ip_address
         self._max_packages = max_send_data_packages
@@ -58,8 +60,14 @@ class node:
             except:
                 return -1
 
-    def check_received(self):
+    def tick(self):
+        for package in self._package_queue:
+            package.tick()
 
+        for package in self._outgoing_packages:
+            package.tick()
+
+    def check_received(self):
         if len(self._package_queue) == 0:
             self._idle_cycles += 1
         else:
@@ -92,6 +100,7 @@ class node:
                             payload_data=out_data))
                 else:
                     self._data_packages_received += 1
+                    self._parent_simulation.add_to_sink(self._current_package)
                     # package of data sent to this device
 
             else:
@@ -118,9 +127,13 @@ class node:
                 self._packages_sent += 1
 
     def write_results(self):
-        print("### Results for ", self, "###")
-        print("Packages sent: ", str(self._packages_sent))
-        print("Packages received: ", str(self._data_packages_received))
-        print("Idle cycles: ", str(self._idle_cycles))
-        print("Length incoming queue: ", str(len(self._package_queue)))
-        print("Length outgoing queue: ", str(len(self._outgoing_packages)))
+        result_string = "### Results for " +  str(self) + "###\n"
+        result_string += "Packages sent: " + str(self._packages_sent) + "\n"
+        result_string += "Packages received: " +\
+                            str(self._data_packages_received) + "\n"
+        result_string += "Idle cycles: " + str(self._idle_cycles) + "\n"
+        result_string += "Length incoming queue: " +\
+                            str(len(self._package_queue)) + "\n"
+        result_string += "Length outgoing queue: " +\
+                            str(len(self._outgoing_packages)) + "\n"
+        return result_string
