@@ -6,21 +6,8 @@ from imports.datetime import get_now
 class simulation:
     def __init__(self,
         is_alt = False,
-        is_one_cycle=False,
-        is_time_based = False, simulation_time = 10,
-        simulation_cycles = 1000,
         number_of_routers = 2, number_of_nodes_per_router = 5,
         max_send_data_packages = 5):
-
-        self._end_of_simulation  = False
-
-        self._is_one_cycle = is_one_cycle
-
-        self._is_time_based = is_time_based
-        self._end_time = get_now() + simulation_time
-
-        self._simulation_cycles = simulation_cycles
-
         self._number_of_routers = number_of_routers
         self._number_of_nodes_per_router = number_of_nodes_per_router
         self._max_send_data_packages = max_send_data_packages
@@ -67,19 +54,6 @@ class simulation:
             router.check_received()
             router.process_package()
             router.send_package()
-
-        if self._is_one_cycle:
-            self._end_of_simulation = True
-
-        if self._is_time_based and get_now() > self._end_time:
-            self._end_of_simulation = True
-
-        if not self._is_time_based:
-            self._simulation_cycles -= 1
-            if self._simulation_cycles <= 0:
-                self._end_of_simulation = True
-
-        return self._end_of_simulation
 
     def get_devices(self):
         return self._devices
