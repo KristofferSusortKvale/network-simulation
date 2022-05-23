@@ -81,6 +81,7 @@ class node:
         if self._current_package is not None:
             if self._current_package.get_header().get_target() == self._ip_address:
                 # package to me
+                self._parent_simulation.add_to_sink(self._current_package)
                 if self._current_package.get_payload().get_is_task():
                     # generate data package as response
                     num_packages = randint(self._max_packages)
@@ -100,7 +101,6 @@ class node:
                             payload_data=out_data))
                 else:
                     self._data_packages_received += 1
-                    self._parent_simulation.add_to_sink(self._current_package)
                     # package of data sent to this device
 
             else:
