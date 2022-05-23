@@ -16,7 +16,7 @@ users = [ user(pretty_name="User "+str(i), wait_multiplier=2000, task_rate=5)
 for user in users:
     user.set_new_task_time()
 
-simulation = simulation(users)
+simulation = simulation()
 
 
 

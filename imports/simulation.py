@@ -5,14 +5,12 @@ from imports.datetime import get_now
 
 class simulation:
     def __init__(self,
-        users,
         is_alt = False,
         is_one_cycle=False,
         is_time_based = False, simulation_time = 10,
         simulation_cycles = 1000,
         number_of_routers = 2, number_of_nodes_per_router = 5,
-        max_send_data_packages = 5,
-        number_of_users = 5):
+        max_send_data_packages = 5):
 
         self._end_of_simulation  = False
 
@@ -26,8 +24,6 @@ class simulation:
         self._number_of_routers = number_of_routers
         self._number_of_nodes_per_router = number_of_nodes_per_router
         self._max_send_data_packages = max_send_data_packages
-
-        self._number_of_users = number_of_users
 
         self._routers = [node(str(i), self, pretty_name="Router " + str(i))
                     for i in range(number_of_routers)]
@@ -46,8 +42,6 @@ class simulation:
 
         self._devices = [
             node for list_of_nodes in self._devices for node in list_of_nodes]
-
-        self._users = users
 
         self._package_sink = []
 
@@ -92,6 +86,3 @@ class simulation:
 
     def get_routers(self):
         return self._routers
-
-    def get_users(self):
-        return self._users
