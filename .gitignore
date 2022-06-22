@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 
 # Graph pictures and other result files
-.png
-.csv
+*.png
+*.csv
