@@ -1,5 +1,4 @@
 from imports.datetime import get_now
-from os.path import join
 from numpy import sum
 
 class header:
@@ -78,6 +77,8 @@ def data(sender_ip_address, target_ip_address, payload_data={}):
     return package(t_header, t_payload)
 
 def package_results(packages):
+    if len(packages) == 0:
+        return "No packages in list"
     result_string = "### Package Results ###\n"
     num_packages = len(packages)
     result_string += "Number of packages = " + str(num_packages) + "\n"
@@ -85,5 +86,4 @@ def package_results(packages):
                         for package in packages]
     avg_ticks = sum(package_ticks) / num_packages
     result_string += "Average ticks alive = " + str(avg_ticks) + "\n"
-    
     return result_string

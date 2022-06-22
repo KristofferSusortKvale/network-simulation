@@ -29,12 +29,17 @@ class user:
         self._next_task -= 1
         return self._next_task <= 0
 
-    def create_package(self, start, target):
+    def package_sent(self):
         self._packages_sent += 1
 
+    def get_packages_sent(self):
+        return self._packages_sent
+
+    def create_package(self, start, target):
         # Setting sender ip address to start node, simulating that as the
         # device the user sends the request from
-        outgoing_package = task(start._ip_address, target.get_ip_address())
+        outgoing_package = task(start.get_ip_address(), target.get_ip_address())
+        start.task_started()
         start.add_package(outgoing_package)
 
     def write_results(self):

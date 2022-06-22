@@ -22,12 +22,21 @@ class node:
         self._packages_sent = 0
         self._data_packages_received = 0
 
+        self._tasks_started = 0
+        self._tasks_finished = 0
+
         if is_test:
             pass
             # file = open(join(unique_string, "test.json"), "w")
             # test_package = ping(self, self)
             # file.write(create_json(test_package))
             # file.close()
+
+    def task_started(self):
+        self._tasks_started += 1
+
+    def task_finished(self):
+        self._tasks_finished += 1
 
     def __str__(self):
         if self._pretty_name == "":
@@ -101,6 +110,7 @@ class node:
                             payload_data=out_data))
                 else:
                     self._data_packages_received += 1
+                    self.task_finished()
                     # package of data sent to this device
 
             else:
@@ -136,4 +146,6 @@ class node:
                             str(len(self._package_queue)) + "\n"
         result_string += "Length outgoing queue: " +\
                             str(len(self._outgoing_packages)) + "\n"
+        result_string += "Tasks started: " + str(self._tasks_started) + "\n"
+        result_string += "Tasks finished: " + str(self._tasks_finished) + "\n"
         return result_string
